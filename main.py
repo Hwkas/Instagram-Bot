@@ -6,7 +6,6 @@ URL = "https://www.instagram.com/?hl=en"
 INSTAGRAM_USERNAME = "YOUR INSTAGRAM USERNAME"
 INSTAGRAM_PASS = "YOUR INSTRGRAM PASSWORD"
 TARGATE_ACCOUNT_LINK = "INSTAGRM ACCOUNT LINK WHOSE FOLLOWERS YOU WANT TO TARGATE"
-# "https://www.instagram.com/chefsteps/"
 
 # creating object form class
 insta_obj = InstaFollowerBot(CHROME_DRIVER_PATH, URL)
