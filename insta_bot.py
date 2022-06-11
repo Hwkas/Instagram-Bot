@@ -42,29 +42,39 @@ class InstaFollowerBot:
         sleep(1)
         self.driver.get(url=account)
         sleep(1)
-        followers_btn = self.driver.find_element(By.XPATH,
-                                                 '//*[@id="react-root"]/section/main/div/header/section/ul/li[2]/a/div').click()
+        followers_btn = self.driver.find_element(By.CSS_SELECTOR, "._aa_5 a").click()
         # use this while to if you want list of all the followers but as instagram has a day limit of number of people
         # you can follow in a single day, that why i am using for loop, to save time from unnecessary scrolling.
         # while True:
-        for n in range(0, 10):
+                for n in range(0, 4):
             sleep(2)
             try:
                 # here '//a' helps in scrolling, '//a' is extra it's not a part of XPATH.
                 for_scroll = self.driver.find_element(By.XPATH,
-                                                      '/html/body/div[6]/div/div/div/div[2]/ul/div/li[1]/div//a').send_keys(
+                                                      '/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[2]/ul/div//a').send_keys(
                     Keys.END)
             except:
                 break
         getting_user_names = self.driver.find_elements(By.CSS_SELECTOR, "li a span")
         for name in getting_user_names:
+            self.username_list.append(name.text)
             print(name.text)
 
     def follow(self):
         follow_btn = self.driver.find_elements(By.CSS_SELECTOR, "li button")
-        for n in follow_btn:
+        for n in range(len(follow_btn)):
             try:
-                n.click()
+                follow_btn[n].click()
+                with open(file="./follow_list.txt", mode="a") as data:
+                    data.write(f"{self.username_list[n+2]}\n")
+
             except:
-                cancel_btn = self.driver.find_element(By.XPATH,
-                                                      '/html/body/div[7]/div/div/div/div[3]/button[2]').click()
+                try:
+                    cancel_btn = self.driver.find_element(By.XPATH,
+                                                          '/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[3]/button[2]').click()
+                except:
+                    follow_limit_reached = self.driver.find_element(By.XPATH,
+                                                                    '/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div[2]/div/div/div/div/div/div/div/div[1]/h3').text
+                    if follow_limit_reached == "Try again later":
+                        sleep(5)
+                        self.driver.quit()
